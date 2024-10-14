@@ -81,4 +81,5 @@ def monitor_folder():
 
 
 monitor_folder()
+
 app.mainloop()

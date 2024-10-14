@@ -1,5 +1,6 @@
 import cv2
 import threading
+import time
 
 class Camera:
     def __init__(self, camera_index=0):
@@ -61,6 +62,8 @@ class Camera:
         self.is_running = False
         if self.cap:
             self.cap.release()
+        
+        time.sleep(0.5)
         self.camera_index = camera_index
         self.start()
 

@@ -47,8 +47,43 @@ def overlay_image_photocard(background_path):
     # Save the result
     overlayed_img_path = f"out/framed/{filename}-framed-{current_date_time()}.png"
     result_image.save(overlayed_img_path)
-    return result_image, overlayed_img_path
+    return overlayed_img_path
     # save_image_for_printing("out/out.png")
+
+def photostrip_processor(image_paths: list):
+    # Load the photostrip frame (with transparency)
+    photostrip = Image.open("../assets/photostrip.png").convert("RGBA")
+
+    # Open the three images to place behind the photostrip
+    photo1 = Image.open(image_paths[0]).convert("RGBA")
+    photo2 = Image.open(image_paths[1]).convert("RGBA")
+    photo3 = Image.open(image_paths[2]).convert("RGBA")
+
+    # Resize the photos to fit within the photostrip's boxes
+    # (Adjust the sizes below based on the actual white areas of your photostrip)
+    size = tuple(s-80 for s in photo1.size)
+    photo1 = photo1.resize(size)  
+    photo2 = photo2.resize(size)  
+    photo3 = photo3.resize(size)  
+
+    # Create a background to paste the photos onto
+    # Make it the same size as the photostrip
+    background = Image.new("RGBA", photostrip.size, (255, 255, 255, 0))
+
+    # Paste the photos into their respective positions
+    # Adjust the coordinates (x, y) based on the white box areas in the photostrip
+    background.paste(photo1, (20, 95))  # Top box
+    background.paste(photo2, (20, 580))  # Middle box
+    background.paste(photo3, (20, 1065))  # Bottom box
+
+    # Overlay the photostrip on top of the photos
+    final_image = Image.alpha_composite(background, photostrip)
+
+    # Save or display the final image
+    save_path = f"out/photostripped/photostrip-{current_date_time()}.png"
+    final_image.save(save_path)
+
+    return save_path
 
 def save_image_for_printing(image_path, size_in_inches=(4, 5), dpi=300):
     # Open the image
