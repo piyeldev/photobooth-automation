@@ -72,9 +72,9 @@ def photostrip_processor(image_paths: list):
 
     # Paste the photos into their respective positions
     # Adjust the coordinates (x, y) based on the white box areas in the photostrip
-    background.paste(photo1, (20, 95))  # Top box
-    background.paste(photo2, (20, 580))  # Middle box
-    background.paste(photo3, (20, 1065))  # Bottom box
+    background.paste(photo1, (20, 103))  # Top box
+    background.paste(photo2, (20, 568))  # Middle box
+    background.paste(photo3, (20, 1031))  # Bottom box
 
     # Overlay the photostrip on top of the photos
     final_image = Image.alpha_composite(background, photostrip)
@@ -106,13 +106,15 @@ def current_date_time():
     formatted_time = current_time.strftime("%y%m%d-%H%M%S")
 
     return formatted_time
-def convert_image_to_pdf(image_path):
+def convert_image_to_pdf(image_path, name_as_prefix):
     # Open the image
+    print("i'm runnin", name_as_prefix)
     image = Image.open(image_path)
+    
     if image.mode != 'RGB':
         image = image.convert('RGB')
     # Convert and save as PDF
-    path = f"out/pdf/{get_filename_from_path(image_path)}.pdf"
+    path = f"out/pdf/{name_as_prefix if name_as_prefix else ""}-{get_filename_from_path(image_path)}.pdf"
     image.save(path, "PDF", resolution=300)
 
     return os.path.join(os.getcwd(), path)
